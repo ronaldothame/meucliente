@@ -7,7 +7,7 @@ public class Ativo
     public string Descricao { get; set; }
     public Guid TipoAtivoId { get; set; }
     public decimal PrecoVenda { get; set; }
-    
+
     public virtual TipoAtivo TipoAtivo { get; set; }
     public virtual ICollection<ItemContrato> ItensContrato { get; set; } = new List<ItemContrato>();
 }

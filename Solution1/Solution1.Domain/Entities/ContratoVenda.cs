@@ -9,7 +9,7 @@ public class ContratoVenda
     public Guid FornecedorId { get; set; }
     public decimal Desconto { get; set; }
     public decimal ValorTotal { get; set; }
-    
+
     public virtual Fornecedor Fornecedor { get; set; }
     public virtual ICollection<ItemContrato> Itens { get; set; } = new List<ItemContrato>();
 }

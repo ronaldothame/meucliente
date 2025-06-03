@@ -41,17 +41,29 @@ public class ContratoVendaService : IContratoVendaService
 
     public async Task<ContratoVendaDto> CreateAsync(CreateContratoVendaDto dto)
     {
-        var contrato = dto.Adapt<ContratoVenda>();
-        contrato.DataCriacao = DateTime.UtcNow;
-        contrato.DataAlteracao = DateTime.UtcNow;
+        var contrato = new ContratoVenda
+        {
+            NumeroContrato = dto.NumeroContrato,
+            FornecedorId = dto.FornecedorId,
+            Desconto = dto.Desconto,
+            DataCriacao = DateTime.UtcNow,
+            DataAlteracao = DateTime.UtcNow,
+            Itens = new List<ItemContrato>()
+        };
 
         if (dto.Itens?.Any() == true)
         {
             foreach (var itemDto in dto.Itens)
             {
-                var item = itemDto.Adapt<ItemContrato>();
-                item.ContratoVendaId = contrato.Id;
-                item.ValorTotal = item.Quantidade * item.PrecoUnitario;
+                var item = new ItemContrato
+                {
+                    AtivoId = itemDto.AtivoId,
+                    Quantidade = itemDto.Quantidade,
+                    PrecoUnitario = itemDto.PrecoUnitario,
+                    ValorTotal = itemDto.Quantidade * itemDto.PrecoUnitario,
+                    ContratoVendaId = contrato.Id
+                };
+
                 contrato.Itens.Add(item);
             }
 

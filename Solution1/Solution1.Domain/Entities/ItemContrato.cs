@@ -7,6 +7,7 @@ public class ItemContrato
     public Guid AtivoId { get; set; }
     public int Quantidade { get; set; }
     public decimal PrecoUnitario { get; set; }
+    public decimal ValorTotal { get; set; }
 
     public virtual ContratoVenda ContratoVenda { get; set; }
     public virtual Ativo Ativo { get; set; }

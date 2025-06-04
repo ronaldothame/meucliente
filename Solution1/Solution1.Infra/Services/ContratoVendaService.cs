@@ -95,14 +95,22 @@ public class ContratoVendaService : IService<ContratoVendaDto, CreateContratoVen
         await ValidateBusinessRulesAsync(dto, id);
 
         contrato.Itens.Clear();
-        dto.Adapt(contrato);
+
+        contrato.NumeroContrato = dto.NumeroContrato;
+        contrato.FornecedorId = dto.FornecedorId;
+        contrato.Desconto = dto.Desconto;
         contrato.DataAlteracao = DateTime.UtcNow;
 
         foreach (var itemDto in dto.Itens)
         {
-            var item = itemDto.Adapt<ItemContrato>();
-            item.ContratoVendaId = contrato.Id;
-            item.ValorTotal = item.Quantidade * item.PrecoUnitario;
+            var item = new ItemContrato
+            {
+                AtivoId = itemDto.AtivoId,
+                Quantidade = itemDto.Quantidade,
+                PrecoUnitario = itemDto.PrecoUnitario,
+                ValorTotal = itemDto.Quantidade * itemDto.PrecoUnitario,
+                ContratoVendaId = contrato.Id
+            };
             contrato.Itens.Add(item);
         }
 

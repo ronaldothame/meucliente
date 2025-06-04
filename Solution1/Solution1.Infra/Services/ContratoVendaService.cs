@@ -51,29 +51,22 @@ public class ContratoVendaService : IContratoVendaService
             Itens = new List<ItemContrato>()
         };
 
-        if (dto.Itens?.Any() == true)
+        foreach (var itemDto in dto.Itens)
         {
-            foreach (var itemDto in dto.Itens)
+            var item = new ItemContrato
             {
-                var item = new ItemContrato
-                {
-                    AtivoId = itemDto.AtivoId,
-                    Quantidade = itemDto.Quantidade,
-                    PrecoUnitario = itemDto.PrecoUnitario,
-                    ValorTotal = itemDto.Quantidade * itemDto.PrecoUnitario,
-                    ContratoVendaId = contrato.Id
-                };
+                AtivoId = itemDto.AtivoId,
+                Quantidade = itemDto.Quantidade,
+                PrecoUnitario = itemDto.PrecoUnitario,
+                ValorTotal = itemDto.Quantidade * itemDto.PrecoUnitario,
+                ContratoVendaId = contrato.Id
+            };
 
-                contrato.Itens.Add(item);
-            }
+            contrato.Itens.Add(item);
+        }
 
-            var subtotal = contrato.Itens.Sum(i => i.ValorTotal);
-            contrato.ValorTotal = subtotal - contrato.Desconto;
-        }
-        else
-        {
-            contrato.ValorTotal = -contrato.Desconto;
-        }
+        var subtotal = contrato.Itens.Sum(i => i.ValorTotal);
+        contrato.ValorTotal = subtotal - contrato.Desconto;
 
         var result = await _repository.AddAsync(contrato);
 

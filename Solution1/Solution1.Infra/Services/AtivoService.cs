@@ -26,16 +26,22 @@ public class AtivoService : IService<AtivoDto, CreateAtivoDto, UpdateAtivoDto>
         return ativos.Adapt<IEnumerable<AtivoDto>>();
     }
 
-    public async Task<AtivoDto?> GetByIdAsync(Guid id)
+    public async Task<AtivoDto> GetByIdAsync(Guid id)
     {
         var ativo = await _context.Ativos
             .Include(a => a.TipoAtivo)
             .FirstOrDefaultAsync(a => a.Id == id);
-        return ativo?.Adapt<AtivoDto>();
+
+        if (ativo == null)
+            throw new KeyNotFoundException($"Ativo com ID {id} não encontrado.");
+
+        return ativo.Adapt<AtivoDto>();
     }
 
     public async Task<AtivoDto> CreateAsync(CreateAtivoDto dto)
     {
+        await ValidateBusinessRulesAsync(dto);
+
         var ativo = dto.Adapt<Ativo>();
         var result = await _repository.AddAsync(ativo);
 
@@ -46,13 +52,15 @@ public class AtivoService : IService<AtivoDto, CreateAtivoDto, UpdateAtivoDto>
         return ativoCompleto.Adapt<AtivoDto>();
     }
 
-    public async Task<AtivoDto?> UpdateAsync(Guid id, UpdateAtivoDto dto)
+    public async Task<AtivoDto> UpdateAsync(Guid id, UpdateAtivoDto dto)
     {
         var ativo = await _repository.GetByIdAsync(id);
-        if (ativo == null) return null;
+        if (ativo == null)
+            throw new KeyNotFoundException($"Ativo com ID {id} não encontrado.");
+
+        await ValidateBusinessRulesAsync(dto, id);
 
         dto.Adapt(ativo);
-
         await _repository.UpdateAsync(ativo);
 
         var ativoCompleto = await _context.Ativos
@@ -62,12 +70,39 @@ public class AtivoService : IService<AtivoDto, CreateAtivoDto, UpdateAtivoDto>
         return ativoCompleto.Adapt<AtivoDto>();
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
         var ativo = await _repository.GetByIdAsync(id);
-        if (ativo == null) return false;
+        if (ativo == null)
+            throw new KeyNotFoundException($"Ativo com ID {id} não encontrado.");
+
+        var ativoEmUso = await _context.ItensContrato.AnyAsync(i => i.AtivoId == id);
+        if (ativoEmUso)
+            throw new InvalidOperationException("Ativo está sendo usado em contratos e não pode ser excluído.");
 
         await _repository.DeleteAsync(id);
-        return true;
+    }
+
+    private async Task ValidateBusinessRulesAsync(CreateAtivoDto dto, Guid? excludeId = null)
+    {
+        var tipoAtivoExists = await _context.TiposAtivo.AnyAsync(t => t.Id == dto.TipoAtivoId);
+        if (!tipoAtivoExists)
+            throw new ArgumentException("Tipo de ativo não encontrado.");
+
+        var codigoExists = await _context.Ativos
+            .AnyAsync(a => a.Codigo == dto.Codigo && (excludeId == null || a.Id != excludeId));
+        if (codigoExists)
+            throw new ArgumentException("Já existe um ativo com este código.");
+    }
+
+    private async Task ValidateBusinessRulesAsync(UpdateAtivoDto dto, Guid excludeId)
+    {
+        await ValidateBusinessRulesAsync(new CreateAtivoDto
+        {
+            Codigo = dto.Codigo,
+            Descricao = dto.Descricao,
+            TipoAtivoId = dto.TipoAtivoId,
+            PrecoVenda = dto.PrecoVenda
+        }, excludeId);
     }
 }

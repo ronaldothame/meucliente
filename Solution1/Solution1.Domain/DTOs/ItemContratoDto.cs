@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Solution1.Domain.Interfaces;
 
 namespace Solution1.Domain.DTOs;
 
-public class ItemContratoDto
+public class ItemContratoDto : IEntityDto
 {
     public Guid Id { get; set; }
     public Guid AtivoId { get; set; }

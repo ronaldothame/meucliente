@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solution1.Domain.DTOs;
-using Solution1.Domain.Services;
+using Solution1.Domain.Interfaces;
 
 namespace Solution1.Api.Controllers;
 
@@ -9,9 +9,9 @@ namespace Solution1.Api.Controllers;
 [Produces("application/json")]
 public class TipoAtivoController : ControllerBase
 {
-    private readonly ITipoAtivoService _tipoAtivoService;
+    private readonly IService<TipoAtivoDto, CreateTipoAtivoDto, UpdateTipoAtivoDto> _tipoAtivoService;
 
-    public TipoAtivoController(ITipoAtivoService tipoAtivoService)
+    public TipoAtivoController(IService<TipoAtivoDto, CreateTipoAtivoDto, UpdateTipoAtivoDto> tipoAtivoService)
     {
         _tipoAtivoService = tipoAtivoService;
     }

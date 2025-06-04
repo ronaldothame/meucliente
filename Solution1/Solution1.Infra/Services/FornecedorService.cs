@@ -2,11 +2,10 @@
 using Solution1.Domain.DTOs;
 using Solution1.Domain.Entities;
 using Solution1.Domain.Interfaces;
-using Solution1.Domain.Services;
 
 namespace Solution1.Infra.Services;
 
-public class FornecedorService : IFornecedorService
+public class FornecedorService : IService<FornecedorDto, CreateFornecedorDto, UpdateFornecedorDto>
 {
     private readonly IRepository<Fornecedor> _repository;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solution1.Domain.DTOs;
-using Solution1.Domain.Services;
+using Solution1.Domain.Interfaces;
 
 namespace Solution1.Api.Controllers;
 
@@ -9,9 +9,10 @@ namespace Solution1.Api.Controllers;
 [Produces("application/json")]
 public class ContratoVendaController : ControllerBase
 {
-    private readonly IContratoVendaService _contratoVendaService;
+    private readonly IService<ContratoVendaDto, CreateContratoVendaDto, UpdateContratoVendaDto> _contratoVendaService;
 
-    public ContratoVendaController(IContratoVendaService contratoVendaService)
+    public ContratoVendaController(
+        IService<ContratoVendaDto, CreateContratoVendaDto, UpdateContratoVendaDto> contratoVendaService)
     {
         _contratoVendaService = contratoVendaService;
     }

@@ -3,12 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Solution1.Domain.DTOs;
 using Solution1.Domain.Entities;
 using Solution1.Domain.Interfaces;
-using Solution1.Domain.Services;
 using Solution1.Infra.Data;
 
 namespace Solution1.Infra.Services;
 
-public class AtivoService : IAtivoService
+public class AtivoService : IService<AtivoDto, CreateAtivoDto, UpdateAtivoDto>
 {
     private readonly IRepository<Ativo> _repository;
     private readonly ApplicationDbContext _context;

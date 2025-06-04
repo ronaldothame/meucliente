@@ -3,12 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Solution1.Domain.DTOs;
 using Solution1.Domain.Entities;
 using Solution1.Domain.Interfaces;
-using Solution1.Domain.Services;
 using Solution1.Infra.Data;
 
 namespace Solution1.Infra.Services;
 
-public class ContratoVendaService : IContratoVendaService
+public class ContratoVendaService : IService<ContratoVendaDto, CreateContratoVendaDto, UpdateContratoVendaDto>
 {
     private readonly IRepository<ContratoVenda> _repository;
     private readonly ApplicationDbContext _context;

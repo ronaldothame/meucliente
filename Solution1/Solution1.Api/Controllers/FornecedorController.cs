@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solution1.Domain.DTOs;
-using Solution1.Domain.Services;
+using Solution1.Domain.Interfaces;
 
 namespace Solution1.Api.Controllers;
 
@@ -9,9 +9,9 @@ namespace Solution1.Api.Controllers;
 [Produces("application/json")]
 public class FornecedorController : ControllerBase
 {
-    private readonly IFornecedorService _fornecedorService;
+    private readonly IService<FornecedorDto, CreateFornecedorDto, UpdateFornecedorDto> _fornecedorService;
 
-    public FornecedorController(IFornecedorService fornecedorService)
+    public FornecedorController(IService<FornecedorDto, CreateFornecedorDto, UpdateFornecedorDto> fornecedorService)
     {
         _fornecedorService = fornecedorService;
     }

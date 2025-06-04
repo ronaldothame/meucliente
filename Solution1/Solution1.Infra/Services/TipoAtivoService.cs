@@ -2,11 +2,10 @@
 using Solution1.Domain.DTOs;
 using Solution1.Domain.Entities;
 using Solution1.Domain.Interfaces;
-using Solution1.Domain.Services;
 
 namespace Solution1.Infra.Services;
 
-public class TipoAtivoService : ITipoAtivoService
+public class TipoAtivoService : IService<TipoAtivoDto, CreateTipoAtivoDto, UpdateTipoAtivoDto>
 {
     private readonly IRepository<TipoAtivo> _repository;
 

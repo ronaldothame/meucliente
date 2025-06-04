@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Solution1.Domain.DTOs;
 using Solution1.Domain.Interfaces;
-using Solution1.Domain.Services;
 using Solution1.Infra.Data;
 using Solution1.Infra.Repositories;
 using Solution1.Infra.Services;
@@ -16,10 +16,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-builder.Services.AddScoped<IFornecedorService, FornecedorService>();
-builder.Services.AddScoped<ITipoAtivoService, TipoAtivoService>();
-builder.Services.AddScoped<IAtivoService, AtivoService>();
-builder.Services.AddScoped<IContratoVendaService, ContratoVendaService>();
+builder.Services.AddScoped<IService<AtivoDto, CreateAtivoDto, UpdateAtivoDto>, AtivoService>();
+builder.Services.AddScoped<IService<TipoAtivoDto, CreateTipoAtivoDto, UpdateTipoAtivoDto>, TipoAtivoService>();
+builder.Services.AddScoped<IService<FornecedorDto, CreateFornecedorDto, UpdateFornecedorDto>, FornecedorService>();
+builder.Services
+    .AddScoped<IService<ContratoVendaDto, CreateContratoVendaDto, UpdateContratoVendaDto>, ContratoVendaService>();
 
 var app = builder.Build();
 

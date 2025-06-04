@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Solution1.Domain.DTOs;
-using Solution1.Domain.Services;
+using Solution1.Domain.Interfaces;
 
 namespace Solution1.Api.Controllers;
 
@@ -9,9 +9,9 @@ namespace Solution1.Api.Controllers;
 [Produces("application/json")]
 public class AtivoController : ControllerBase
 {
-    private readonly IAtivoService _ativoService;
+    private readonly IService<AtivoDto, CreateAtivoDto, UpdateAtivoDto> _ativoService;
 
-    public AtivoController(IAtivoService ativoService)
+    public AtivoController(IService<AtivoDto, CreateAtivoDto, UpdateAtivoDto> ativoService)
     {
         _ativoService = ativoService;
     }

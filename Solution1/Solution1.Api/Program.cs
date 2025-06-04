@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Solution1.Api.Middleware;
 using Solution1.Domain.DTOs;
 using Solution1.Domain.Interfaces;
 using Solution1.Infra.Data;
@@ -31,6 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseErrorHandling();
 app.UseAuthorization();
 app.MapControllers();
 

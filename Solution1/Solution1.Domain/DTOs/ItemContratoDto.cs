@@ -1,4 +1,6 @@
-﻿namespace Solution1.Domain.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Solution1.Domain.DTOs;
 
 public class ItemContratoDto
 {
@@ -12,7 +14,14 @@ public class ItemContratoDto
 
 public class CreateItemContratoDto
 {
+    [Required(ErrorMessage = "ID do Ativo é obrigatório para o item.")]
     public Guid AtivoId { get; set; }
+
+    [Required(ErrorMessage = "Quantidade é obrigatória para o item.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Quantidade deve ser pelo menos 1.")]
     public int Quantidade { get; set; }
+
+    [Required(ErrorMessage = "Preço unitário é obrigatório para o item.")]
+    [Range(0.01, (double)decimal.MaxValue, ErrorMessage = "Preço unitário deve ser maior que zero.")]
     public decimal PrecoUnitario { get; set; }
 }
